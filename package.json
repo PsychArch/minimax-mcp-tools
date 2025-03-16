@@ -1,0 +1,50 @@
+{
+  "name": "minimax-mcp-tools",
+  "version": "1.0.0",
+  "description": "MCP server with Minimax API integration for image generation and text-to-speech",
+  "type": "module",
+  "main": "index.js",
+  "bin": {
+    "minimax-mcp-tools": "./index.js"
+  },
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "mcp",
+    "minimax",
+    "ai",
+    "image-generation",
+    "text-to-speech",
+    "tts"
+  ],
+  "author": "PsychArch (https://github.com/PsychArch)",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PsychArch/minimax-mcp-tools.git"
+  },
+  "bugs": {
+    "url": "https://github.com/PsychArch/minimax-mcp-tools/issues"
+  },
+  "homepage": "https://github.com/PsychArch/minimax-mcp-tools#readme",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.7.0",
+    "node-fetch": "^3.3.2",
+    "zod": "^3.22.4"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "files": [
+    "index.js",
+    "minimax-api.js",
+    "minimax-tts-api.js",
+    "README.md",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
+}
