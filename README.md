@@ -1,5 +1,7 @@
 # Minimax MCP Tools
 
+![Minimax MCP Tools Banner](assets/minimax-mcp-tools-banner.jpg)
+
 A Model Context Protocol (MCP) server implementation with Minimax API integration for AI-powered image generation and text-to-speech functionality.
 
 ## Features
@@ -7,18 +9,6 @@ A Model Context Protocol (MCP) server implementation with Minimax API integratio
 - **Image Generation**: Generate high-quality images based on text prompts using Minimax's image-01 model
 - **Text-to-Speech (TTS)**: Convert text to natural-sounding speech with various voice options, emotions, and audio formats
 - **Easy Integration**: Seamlessly integrates with Windsurf editor as an MCP server
-
-## Installation
-
-```bash
-# Install from npm
-npm install minimax-mcp-tools
-
-# Or clone the repository
-git clone https://github.com/PsychArch/minimax-mcp-tools.git
-cd minimax-mcp-tools
-npm install
-```
 
 ## Setup
 
@@ -40,10 +30,10 @@ Create or update your MCP configuration file:
 ```json
 {
   "mcpServers": {
-    "minimax-tools": {
-      "command": "node",
+    "minimax-mcp-tools": {
+      "command": "npx",
       "args": [
-        "/path/to/minimax-mcp-tools/index.js"
+        "minimax-mcp-tools"
       ],
       "env": {
         "MINIMAX_API_KEY": "your-minimax-api-key",
@@ -54,7 +44,7 @@ Create or update your MCP configuration file:
 }
 ```
 
-## Usage
+## MCP Interface
 
 ### Image Generation
 
@@ -142,6 +132,5 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## Acknowledgements
 
-- [Minimax API](https://api.minimax.chat/) for providing the AI models
-- [Model Context Protocol](https://github.com/modelcontextprotocol/mcp) for the MCP specification
-- [Windsurf](https://github.com/codeium/windsurf) for the MCP integration
+- [Minimax API](https://platform.minimaxi.com/) for providing the AI models
+- [Model Context Protocol](https://github.com/modelcontextprotocol/) for the MCP specification
