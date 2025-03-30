@@ -16,9 +16,13 @@ const __dirname = dirname(__filename);
  * @param {string} outputFile - Absolute path to save the generated image
  * @returns {Promise<Object>} - Object containing the image information
  */
-export async function generateImage(prompt, apiKey, options = {}, outputDir = 'generated-images', outputFile = null) {
+export async function generateImage(prompt, apiKey, options = {}, outputDir, outputFile) {
   if (!apiKey) {
     throw new Error('Minimax API key is required');
+  }
+
+  if (!outputFile) {
+    throw new Error('Output file path is required');
   }
 
   const url = "https://api.minimax.chat/v1/image_generation";
@@ -52,7 +56,7 @@ export async function generateImage(prompt, apiKey, options = {}, outputDir = 'g
     }
 
     // Create output directory if it doesn't exist
-    const absoluteOutputDir = outputFile ? path.dirname(outputFile) : path.resolve(__dirname, outputDir);
+    const absoluteOutputDir = path.dirname(outputFile);
     if (!fs.existsSync(absoluteOutputDir)) {
       fs.mkdirSync(absoluteOutputDir, { recursive: true });
     }

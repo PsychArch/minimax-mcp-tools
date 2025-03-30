@@ -17,13 +17,17 @@ const __dirname = dirname(__filename);
  * @param {string} outputFile - Absolute path to save the generated audio file
  * @returns {Promise<Object>} - Object containing the audio information
  */
-export async function generateSpeech(text, apiKey, groupId, options = {}, outputDir = 'generated-audio', outputFile = null) {
+export async function generateSpeech(text, apiKey, groupId, options = {}, outputDir, outputFile) {
   if (!apiKey) {
     throw new Error('Minimax API key is required');
   }
 
   if (!groupId) {
     throw new Error('Minimax group ID is required');
+  }
+
+  if (!outputFile) {
+    throw new Error('Output file path is required');
   }
 
   const url = `https://api.minimax.chat/v1/t2a_v2?GroupId=${groupId}`;
@@ -103,7 +107,7 @@ export async function generateSpeech(text, apiKey, groupId, options = {}, output
     }
 
     // Create output directory if it doesn't exist
-    const absoluteOutputDir = outputFile ? path.dirname(outputFile) : path.resolve(__dirname, outputDir);
+    const absoluteOutputDir = path.dirname(outputFile);
     if (!fs.existsSync(absoluteOutputDir)) {
       fs.mkdirSync(absoluteOutputDir, { recursive: true });
     }
@@ -113,17 +117,9 @@ export async function generateSpeech(text, apiKey, groupId, options = {}, output
       const timestamp = Date.now();
       const format = audioSettings.format;
       
-      // Use outputFile if provided, otherwise generate a filename
-      let filename;
-      let filePath;
-      
-      if (outputFile) {
-        filePath = outputFile;
-        filename = path.basename(outputFile);
-      } else {
-        filename = `speech_${timestamp}.${format}`;
-        filePath = path.join(absoluteOutputDir, filename);
-      }
+      // Use outputFile path directly
+      const filename = path.basename(outputFile);
+      const filePath = outputFile;
       
       // Convert hex string to buffer and save
       const buffer = Buffer.from(data.data.audio, 'hex');

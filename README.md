@@ -56,15 +56,15 @@ Generate images based on text prompts:
   "prompt": "A mountain landscape at sunset",
   "aspectRatio": "16:9",
   "n": 1,
-  "outputDir": "generated-images"
+  "outputFile": "/absolute/path/to/image.jpg"
 }
 ```
 
 Parameters:
 - `prompt` (required): Description of the image to generate
+- `outputFile` (required): Absolute path to save the generated image file
 - `aspectRatio` (optional): Aspect ratio of the image (default: "1:1", options: "1:1", "16:9", "4:3", "3:2", "2:3", "3:4", "9:16", "21:9")
 - `n` (optional): Number of images to generate (default: 1, range: 1-9)
-- `outputDir` (optional): Directory to save the generated images (default: "generated-images")
 
 ### Text-to-Speech
 
@@ -81,17 +81,15 @@ Convert text to speech with various customization options:
   "pitch": 0,
   "emotion": "happy",
   "format": "mp3",
-  "outputDir": "generated-audio",
+  "outputFile": "/absolute/path/to/audio.mp3",
   "subtitleEnable": true
 }
 ```
 
 #### Basic Parameters:
 - `text` (required): Text to convert to speech (max 10,000 characters)
+- `outputFile` (required): Absolute path to save the generated audio file
 - `model` (optional): Model version to use (default: "speech-01-turbo", options: "speech-01-turbo", "speech-01-240228", "speech-01-turbo-240228", "speech-01-hd")
-- `outputDir` (optional): Directory to save the generated audio (default: "generated-audio")
-
-#### Voice Settings:
 - `voiceId` (optional): Voice ID to use (default: "male-qn-qingse")
 - `speed` (optional): Speech speed (default: 1.0, range: 0.5-2.0)
 - `volume` (optional): Speech volume (default: 1.0, range: 0.1-10.0)

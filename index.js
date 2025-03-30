@@ -15,7 +15,7 @@ const __dirname = dirname(__filename);
 // Create a new MCP server
 const server = new McpServer({
   name: "minimax-mcp-tools",
-  version: "1.0.0"
+  version: "1.1.0"
 });
 
 // Define an image generation tool using Minimax API
@@ -24,7 +24,7 @@ server.tool(
   { 
     prompt: z.string().describe("Description of the image to generate"),
     aspectRatio: z.enum(["1:1", "16:9", "4:3", "3:2", "2:3", "3:4", "9:16", "21:9"]).optional().describe("Aspect ratio of the image"),
-    outputFile: z.string().optional().describe("Absolute path to save the generated image file"),
+    outputFile: z.string().describe("Absolute path to save the generated image file"),
     n: z.number().min(1).max(9).optional().describe("Number of images to generate (1-9)")
   },
   async ({ prompt, aspectRatio, outputFile, n }) => {
@@ -40,7 +40,7 @@ server.tool(
     }
 
     // Set default output directory if not provided
-    const outputDirectory = outputFile ? path.dirname(outputFile) : 'generated-images';
+    const outputDirectory = path.dirname(outputFile);
     
     try {
       // Call the Minimax API to generate the image
@@ -60,8 +60,7 @@ server.tool(
 
       // Prepare the response with image information
       const imageDetails = result.images.map(img => {
-        const absolutePath = outputFile ? outputFile : img.localPath;
-        return `- Image saved to: ${absolutePath}\n  URL: ${img.url}`;
+        return `- Image saved to: ${outputFile}\n  URL: ${img.url}`;
       }).join('\n');
 
       return {
@@ -107,7 +106,7 @@ server.tool(
     pitch: z.number().min(-12).max(12).optional().describe("Speech pitch (-12 to 12)"),
     emotion: z.enum(["happy", "sad", "angry", "fearful", "disgusted", "surprised", "neutral"]).optional().describe("Emotion of the speech"),
     format: z.enum(["mp3", "pcm", "flac", "wav"]).optional().describe("Audio format"),
-    outputFile: z.string().optional().describe("Absolute path to save the generated audio file"),
+    outputFile: z.string().describe("Absolute path to save the generated audio file"),
     sampleRate: z.enum([8000, 16000, 22050, 24000, 32000, 44100]).optional().describe("Sample rate of the generated audio"),
     bitrate: z.enum([32000, 64000, 128000, 256000]).optional().describe("Bitrate of the generated audio (for MP3 only)"),
     channel: z.enum([1, 2]).optional().describe("Number of audio channels (1=mono, 2=stereo)"),
@@ -155,7 +154,7 @@ server.tool(
     }
 
     // Set default output directory if not provided
-    const outputDirectory = outputFile ? path.dirname(outputFile) : 'generated-audio';
+    const outputDirectory = path.dirname(outputFile);
     
     try {
       // Call the Minimax API to generate speech
@@ -192,7 +191,7 @@ server.tool(
       const durationSeconds = audioInfo.length / 1000; // Convert milliseconds to seconds
       const fileSizeKB = Math.round(audioInfo.size / 1024); // Convert bytes to KB
 
-      let responseText = `Successfully generated speech:\n- Audio saved to: ${outputFile || audioInfo.localPath}\n- Format: ${audioInfo.format}\n- Duration: ${durationSeconds.toFixed(2)} seconds\n- File size: ${fileSizeKB} KB`;
+      let responseText = `Successfully generated speech:\n- Audio saved to: ${outputFile}\n- Format: ${audioInfo.format}\n- Duration: ${durationSeconds.toFixed(2)} seconds\n- File size: ${fileSizeKB} KB`;
       
       // Add subtitle information if available
       if (audioInfo.subtitlePath) {
