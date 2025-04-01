@@ -24,10 +24,11 @@ server.tool(
   { 
     prompt: z.string().describe("Description of the image to generate"),
     aspectRatio: z.enum(["1:1", "16:9", "4:3", "3:2", "2:3", "3:4", "9:16", "21:9"]).optional().describe("Aspect ratio of the image"),
-    outputFile: z.string().describe("Absolute path to save the generated image file"),
-    n: z.number().min(1).max(9).optional().describe("Number of images to generate (1-9)")
+    outputFile: z.string().describe("Absolute path to save the generated image file. The directory must already exist. When generating multiple images (n>1), files will be named with sequential numbers (e.g., 'image-1.jpg', 'image-2.jpg')"),
+    n: z.number().min(1).max(9).optional().describe("Number of images to generate (1-9)"),
+    subjectReference: z.string().optional().describe("Path to a local image file or a public URL for character reference image")
   },
-  async ({ prompt, aspectRatio, outputFile, n }) => {
+  async ({ prompt, aspectRatio, outputFile, n, subjectReference }) => {
     // Get API key from environment variable
     const apiKey = process.env.MINIMAX_API_KEY;
     if (!apiKey) {
@@ -46,7 +47,8 @@ server.tool(
       // Call the Minimax API to generate the image
       const result = await generateImage(prompt, apiKey, {
         aspectRatio: aspectRatio || "1:1",
-        n: n || 1
+        n: n || 1,
+        subjectReference
       }, outputDirectory, outputFile);
 
       if (!result.success) {
@@ -60,7 +62,7 @@ server.tool(
 
       // Prepare the response with image information
       const imageDetails = result.images.map(img => {
-        return `- Image saved to: ${outputFile}\n  URL: ${img.url}`;
+        return `- Image saved to: ${img.localPath}\n  URL: ${img.url}`;
       }).join('\n');
 
       return {
@@ -71,10 +73,17 @@ server.tool(
       };
     } catch (error) {
       console.error('Error in generate_image tool:', error);
+      
+      // Provide more specific error messages for common issues
+      let errorMessage = error.message;
+      if (error.message.includes('directory does not exist')) {
+        errorMessage = `The specified output directory does not exist. Please make sure the directory exists before generating images. Error: ${error.message}`;
+      }
+      
       return {
         content: [{ 
           type: "text", 
-          text: `Error generating image: ${error.message}` 
+          text: `Error generating image: ${errorMessage}` 
         }]
       };
     }

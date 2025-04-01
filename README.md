@@ -56,15 +56,17 @@ Generate images based on text prompts:
   "prompt": "A mountain landscape at sunset",
   "aspectRatio": "16:9",
   "n": 1,
-  "outputFile": "/absolute/path/to/image.jpg"
+  "outputFile": "/absolute/path/to/image.jpg",
+  "subjectReference": "/path/to/reference.jpg" // Optional: local file or URL
 }
 ```
 
 Parameters:
 - `prompt` (required): Description of the image to generate
-- `outputFile` (required): Absolute path to save the generated image file
+- `outputFile` (required): Absolute path to save the generated image file. **The directory must already exist**. When generating multiple images (n>1), files will be named with sequential numbers (e.g., 'image-1.jpg', 'image-2.jpg').
 - `aspectRatio` (optional): Aspect ratio of the image (default: "1:1", options: "1:1", "16:9", "4:3", "3:2", "2:3", "3:4", "9:16", "21:9")
-- `n` (optional): Number of images to generate (default: 1, range: 1-9)
+- `n` (optional): Number of images to generate (default: 1, range: 1-9). When n>1, the output filenames will be automatically numbered.
+- `subjectReference` (optional): Path to a local image file or a public URL for character reference. When provided, the generated image will use this as a reference for character appearance. Supported formats: JPG, JPEG, PNG
 
 ### Text-to-Speech
 

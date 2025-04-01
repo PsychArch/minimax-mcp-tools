@@ -1,6 +1,6 @@
 {
   "name": "minimax-mcp-tools",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "MCP server with Minimax API integration for image generation and text-to-speech",
   "type": "module",
   "main": "index.js",
