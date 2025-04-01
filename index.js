@@ -15,7 +15,7 @@ const __dirname = dirname(__filename);
 // Create a new MCP server
 const server = new McpServer({
   name: "minimax-mcp-tools",
-  version: "1.1.0"
+  version: "1.2.0"
 });
 
 // Define an image generation tool using Minimax API
