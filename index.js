@@ -15,7 +15,7 @@ const __dirname = dirname(__filename);
 // Create a new MCP server
 const server = new McpServer({
   name: "minimax-mcp-tools",
-  version: "1.2.0"
+  version: "1.4.0"
 });
 
 // Define an image generation tool using Minimax API
@@ -96,7 +96,7 @@ const voiceIdDescription = `Voice ID to use. Options include:
 - Female voices: female-shaonv (少女), female-yujie (御姐), female-chengshu (成熟女性), female-tianmei (甜美女性)
 - Presenters: presenter_male (男性主持人), presenter_female (女性主持人)
 - Audiobooks: audiobook_male_1 (男性有声书1), audiobook_male_2 (男性有声书2), audiobook_female_1 (女性有声书1), audiobook_female_2 (女性有声书2)
-- Beta voices: male-qn-qingse-jingpin (青涩青年-beta), female-shaonv-jingpin (少女音色-beta)
+- Beta voices: male-qn-qingse-jingpin (青涩青年-beta), male-qn-jingying-jingpin (精英青年-beta), male-qn-badao-jingpin (霸道青年-beta), male-qn-daxuesheng-jingpin (青年大学生-beta), female-shaonv-jingpin (少女音色-beta), female-yujie-jingpin (御姐音色-beta), female-chengshu-jingpin (成熟女性-beta), female-tianmei-jingpin (甜美女性-beta)
 - Character voices: clever_boy (聪明男童), cute_boy (可爱男童), lovely_girl (萌萌女童), cartoon_pig (卡通猪小琪), 
   bingjiao_didi (病娇弟弟), junlang_nanyou (俊朗男友), chunzhen_xuedi (纯真学弟), lengdan_xiongzhang (冷淡学长),
   badao_shaoye (霸道少爷), tianxin_xiaoling (甜心小玲), qiaopi_mengmei (俏皮萌妹), wumei_yujie (妩媚御姐),
@@ -108,7 +108,7 @@ server.tool(
   "generate_speech",
   { 
     text: z.string().describe("Text to convert to speech"),
-    model: z.enum(["speech-01-turbo", "speech-01-240228", "speech-01-turbo-240228", "speech-01-hd"]).optional().describe("Model version to use for speech generation"),
+    model: z.enum(["speech-02-hd", "speech-02-turbo"]).optional().describe("Model version to use for speech generation. speech-02-hd is the newest high-definition model with better quality and naturalness. speech-02-turbo has excellent performance with low latency."),
     voiceId: z.string().optional().describe(voiceIdDescription),
     speed: z.number().min(0.5).max(2).optional().describe("Speech speed (0.5-2.0)"),
     volume: z.number().min(0.1).max(10).optional().describe("Speech volume (0.1-10.0)"),
@@ -131,7 +131,8 @@ server.tool(
     languageBoost: z.enum([
       "Chinese", "Chinese,Yue", "English", "Arabic", "Russian", "Spanish", 
       "French", "Portuguese", "German", "Turkish", "Dutch", "Ukrainian", 
-      "Vietnamese", "Indonesian", "Japanese", "Italian", "Korean", "auto"
+      "Vietnamese", "Indonesian", "Japanese", "Italian", "Korean", "Thai",
+      "Polish", "Romanian", "Greek", "Czech", "Finnish", "Hindi", "auto"
     ]).optional().describe("Enhance recognition of specific languages"),
     subtitleEnable: z.boolean().optional().describe("Whether to enable subtitle generation")
   },

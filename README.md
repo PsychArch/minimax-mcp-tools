@@ -76,7 +76,7 @@ Convert text to speech with various customization options:
 // Example parameters for text-to-speech
 {
   "text": "Hello, this is a test of the text-to-speech functionality.",
-  "model": "speech-01-turbo",
+  "model": "speech-02-hd",
   "voiceId": "female-shaonv",
   "speed": 1.0,
   "volume": 1.0,
@@ -91,7 +91,9 @@ Convert text to speech with various customization options:
 #### Basic Parameters:
 - `text` (required): Text to convert to speech (max 10,000 characters)
 - `outputFile` (required): Absolute path to save the generated audio file
-- `model` (optional): Model version to use (default: "speech-01-turbo", options: "speech-01-turbo", "speech-01-240228", "speech-01-turbo-240228", "speech-01-hd")
+- `model` (optional): Model version to use (default: "speech-02-hd", options: "speech-02-hd", "speech-02-turbo")
+  - `speech-02-hd`: High-definition model with excellent timbre similarity, rhythm stability, and studio-grade audio quality
+  - `speech-02-turbo`: Fast model with excellent performance and low latency, enhanced multilingual capabilities
 - `voiceId` (optional): Voice ID to use (default: "male-qn-qingse")
 - `speed` (optional): Speech speed (default: 1.0, range: 0.5-2.0)
 - `volume` (optional): Speech volume (default: 1.0, range: 0.1-10.0)
@@ -119,7 +121,7 @@ Convert text to speech with various customization options:
   ```
 - `stream` (optional): Whether to use streaming mode (default: false)
 - `languageBoost` (optional): Enhance recognition of specific languages
-  - Options: "Chinese", "Chinese,Yue", "English", "Arabic", "Russian", "Spanish", "French", "Portuguese", "German", "Turkish", "Dutch", "Ukrainian", "Vietnamese", "Indonesian", "Japanese", "Italian", "Korean", "auto"
+  - Options: "Chinese", "Chinese,Yue", "English", "Arabic", "Russian", "Spanish", "French", "Portuguese", "German", "Turkish", "Dutch", "Ukrainian", "Vietnamese", "Indonesian", "Japanese", "Italian", "Korean", "Thai", "Polish", "Romanian", "Greek", "Czech", "Finnish", "Hindi", "auto"
 - `subtitleEnable` (optional): Whether to enable subtitle generation (default: false)
 
 ## License

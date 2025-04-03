@@ -56,7 +56,7 @@ export async function generateSpeech(text, apiKey, groupId, options = {}, output
 
   // Build the request payload
   const payload = {
-    model: options.model || "speech-01-turbo",
+    model: options.model || "speech-02-hd",
     text: text,
     stream: options.stream || false,
     voice_setting: voiceSettings,
