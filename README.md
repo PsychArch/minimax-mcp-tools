@@ -4,11 +4,12 @@
 
 A Model Context Protocol (MCP) server implementation with Minimax API integration for AI-powered image generation and text-to-speech functionality.
 
+English | [简体中文](README.zh-CN.md)
+
 ## Features
 
 - **Image Generation**: Generate high-quality images based on text prompts using Minimax's image-01 model
 - **Text-to-Speech (TTS)**: Convert text to natural-sounding speech with various voice options, emotions, and audio formats
-- **Easy Integration**: Seamlessly integrates with Windsurf editor as an MCP server
 
 ## Setup
 
@@ -21,11 +22,6 @@ A Model Context Protocol (MCP) server implementation with Minimax API integratio
 ### Configuration
 
 Create or update your MCP configuration file:
-
-   - For Windsurf: `~/.codeium/windsurf/mcp_config.json`
-   - For Cursor: `~/.cursor/config/mcp_config.json`
-
-   Both editors use the same configuration format:
 
 ```json
 {
