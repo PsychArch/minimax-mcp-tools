@@ -1,3 +1,5 @@
+[![MseeP.ai Security Assessment Badge](https://mseep.net/pr/psycharch-minimax-mcp-tools-badge.png)](https://mseep.ai/app/psycharch-minimax-mcp-tools)
+
 # Minimax MCP Tools
 
 ![Minimax MCP Tools Banner](assets/minimax-mcp-tools-banner.jpg)
