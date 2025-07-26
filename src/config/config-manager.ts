@@ -2,7 +2,7 @@ import { MinimaxConfigError } from '../utils/error-handler.ts';
 
 interface Config {
   apiKey: string;
-  apiHost?: string;
+  apiHost: string;
   logLevel: 'error' | 'debug';
   tempDir: string;
   maxConcurrency: number;
@@ -38,12 +38,12 @@ export class ConfigManager {
   private loadConfig(): Config {
     return {
       apiKey: this.getRequiredEnv('MINIMAX_API_KEY'),
-      apiHost: process.env.MINIMAX_API_HOST,
-      logLevel: (process.env.LOG_LEVEL as 'error' | 'debug') || 'error',
-      tempDir: process.env.TEMP_DIR || '/tmp',
-      maxConcurrency: parseInt(process.env.MAX_CONCURRENCY || '5', 10),
-      retryAttempts: parseInt(process.env.RETRY_ATTEMPTS || '3', 10),
-      retryDelay: parseInt(process.env.RETRY_DELAY || '1000', 10)
+      apiHost: 'https://api.minimax.chat',
+      logLevel: 'error',
+      tempDir: '/tmp',
+      maxConcurrency: 5,
+      retryAttempts: 3,
+      retryDelay: 1000
     };
   }
 
