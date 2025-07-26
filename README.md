@@ -6,31 +6,14 @@ A Model Context Protocol (MCP) server for Minimax AI integration, providing asyn
 
 English | [简体中文](README.zh-CN.md)
 
-## Quick Start
-
-### 1. Prerequisites
-- Node.js 18+
-- Minimax API key from [platform.minimaxi.com](https://platform.minimaxi.com/)
-
-### 2. Setup
-```bash
-# Set your API key
-export MINIMAX_API_KEY="your_api_key_here"
-
-# Install and run
-npm install
-npm start
-```
-
-### 3. MCP Configuration
+### MCP Configuration
 Add to your MCP settings:
 ```json
 {
   "mcpServers": {
     "minimax-mcp-tools": {
-      "command": "node",
-      "args": ["index.js"],
-      "cwd": "/path/to/minimax-mcp-tools",
+      "command": "npx",
+      "args": ["minimax-mcp-tools"],
       "env": {
         "MINIMAX_API_KEY": "your_api_key_here"
       }
@@ -39,92 +22,88 @@ Add to your MCP settings:
 }
 ```
 
+## Async Design - Perfect for Content Production at Scale
+
+This MCP server uses an **asynchronous submit-and-barrier pattern** designed for **batch content creation**:
+
+🎬 **Narrated Slideshow Production** - Generate dozens of slide images and corresponding narration in parallel  
+📚 **AI-Driven Audiobook Creation** - Produce chapters with multiple voice characters simultaneously  
+🖼️ **Website Asset Generation** - Create consistent visual content and audio elements for web projects  
+🎯 **Multimedia Content Pipelines** - Perfect for LLM-driven content workflows requiring both visuals and audio
+
+### Architecture Benefits:
+1. **Submit Phase**: Tools return immediately with task IDs, tasks execute in background
+2. **Smart Rate Limiting**: Adaptive rate limiting (10 RPM images, 20 RPM speech) with burst capacity 
+3. **Barrier Synchronization**: `task_barrier` waits for all tasks and returns comprehensive results
+4. **Batch Optimization**: Submit multiple tasks to saturate rate limits, then barrier once for maximum throughput
+
+
+
 ## Tools
 
 ### `submit_image_generation`
-Generate images asynchronously with rate limiting (10 RPM).
+**Submit Image Generation Task** - Generate images asynchronously. 
 
-**Required:**
-- `prompt`: Text description (max 1500 chars)
-- `outputFile`: Absolute path for image file
-
-**Optional:**
-- `aspectRatio`: "1:1", "16:9", "4:3", etc. (default: "1:1")
-- `n`: Number of images 1-9 (default: 1)
-- `model`: "image-01" or "image-01-live" (default: "image-01")
-- `subjectReference`: Reference image URL or local path
-- `customSize`: `{width, height}` (512-2048, divisible by 8)
+**Required:** `prompt`, `outputFile`  
+**Optional:** `aspectRatio`, `customSize`, `seed`, `subjectReference`, `style`
 
 ### `submit_speech_generation`
-Convert text to speech asynchronously with rate limiting (20 RPM).
+**Submit Speech Generation Task** - Convert text to speech asynchronously.
 
-**Required:**
-- `text`: Text to convert (max 10000 chars)
-- `outputFile`: Absolute path for audio file
-
-**Optional:**
-- `model`: "speech-02-hd" or "speech-02-turbo" (default: "speech-02-hd")
-- `voiceId`: Voice identifier (default: "female-shaonv"). Available voices:
-  - **Chinese Male**: male-qn-qingse, male-qn-jingying, male-qn-badao, male-qn-daxuesheng
-  - **Chinese Female**: female-shaonv, female-yujie, female-chengshu, female-tianmei
-  - **Professional**: presenter_male, presenter_female, audiobook_male_1/2, audiobook_female_1/2
-  - **Beta Quality**: *-jingpin versions of above voices
-  - **Children/Character**: clever_boy, cute_boy, lovely_girl, cartoon_pig, bingjiao_didi, etc.
-  - **English**: Santa_Claus, Grinch, Rudolph, Arnold, Charming_Santa, Charming_Lady, etc.
-- `speed`: 0.5-2.0 (default: 1.0)
-- `emotion`: "neutral", "happy", "sad", "angry", "fearful", "disgusted", "surprised" (default: "neutral")
-- `format`: "mp3", "wav", "flac", "pcm" (default: "mp3")
-- `volume`: 0.1-10.0 (default: 1.0)
-- `pitch`: -12 to 12 (default: 0)
+**Required:** `text`, `outputFile`  
+**Optional:** `highQuality`, `voiceId`, `speed`, `volume`, `pitch`, `emotion`, `format`, `sampleRate`, `bitrate`, `languageBoost`, `intensity`, `timbre`, `sound_effects`
 
 ### `task_barrier`
-Wait for all submitted tasks to complete and get results.
-
-## Usage Example
-
-```javascript
-// Submit multiple tasks
-await submit_image_generation({
-  prompt: "A serene mountain landscape",
-  outputFile: "/tmp/mountain.jpg",
-  aspectRatio: "16:9"
-});
-
-await submit_speech_generation({
-  text: "Hello world, this is a test",
-  outputFile: "/tmp/speech.mp3",
-  emotion: "happy"
-});
-
-// Wait for completion and get results
-await task_barrier();
-```
-
-## Features
-
-✅ **No Group ID Required** - Only API key needed  
-✅ **Async Task Management** - Submit multiple tasks, wait with barrier  
-✅ **Adaptive Rate Limiting** - Automatic adjustment based on API responses  
-✅ **Comprehensive Error Handling** - Detailed error messages and recovery  
-✅ **Production Ready** - Health checks, metrics, graceful shutdown  
+**Wait for Task Completion** - Wait for ALL submitted tasks to complete and retrieve results. Essential for batch processing.
 
 ## Architecture
+```mermaid
+sequenceDiagram
+    participant User
+    participant MCP as MCP Server
+    participant TM as Task Manager
+    participant API as Minimax API
 
-- **Clean separation**: Config, services, utilities properly separated
-- **Rate limiting**: Token bucket with burst capacity and adaptive adjustment
-- **Error recovery**: Exponential backoff with circuit breaking
-- **Validation**: Zod-based schemas with detailed error messages
-- **Monitoring**: Built-in health checks and performance metrics
+    Note over User, API: Async Submit-and-Barrier Pattern
 
-## Environment Variables
+    User->>MCP: submit_image_generation(prompt1)
+    MCP->>TM: submitImageTask()
+    TM-->>MCP: taskId: img-001
+    MCP-->>User: "Task img-001 submitted"
+    
+    par Background Execution (Rate Limited)
+        TM->>API: POST /image/generate
+        API-->>TM: image data + save file
+    end
 
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `MINIMAX_API_KEY` | *required* | Your Minimax API key |
-| `LOG_LEVEL` | `error` | Logging level: `error` or `debug` |
-| `MAX_CONCURRENCY` | `5` | Max concurrent tasks |
-| `RETRY_ATTEMPTS` | `3` | Number of retry attempts |
+    User->>MCP: submit_speech_generation(text1)
+    MCP->>TM: submitTTSTask()
+    TM-->>MCP: taskId: tts-002
+    MCP-->>User: "Task tts-002 submitted"
+    
+    par Background Execution (Rate Limited)
+        TM->>API: POST /speech/generate
+        API-->>TM: audio data + save file
+    end
+
+    User->>MCP: submit_image_generation(prompt2)
+    MCP->>TM: submitImageTask()
+    TM-->>MCP: taskId: img-003
+    MCP-->>User: "Task img-003 submitted"
+
+    par Background Execution (Rate Limited)
+        TM->>API: POST /image/generate (queued)
+        API-->>TM: image data + save file
+    end
+
+    User->>MCP: task_barrier()
+    MCP->>TM: barrier()
+    TM->>TM: wait for all tasks
+    TM-->>MCP: results summary
+    MCP-->>User: ✅ All tasks completed<br/>Files available at specified paths
+
+    Note over User, API: Immediate Task Submission + Background Rate-Limited Execution
+```
 
 ## License
-
 MIT
