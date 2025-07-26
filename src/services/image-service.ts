@@ -1,8 +1,8 @@
-import { MinimaxBaseClient } from '../core/base-client.ts';
-import { API_CONFIG, DEFAULTS, MODELS, CONSTRAINTS, type ImageModel } from '../config/constants.ts';
-import { FileHandler } from '../utils/file-handler.ts';
-import { ErrorHandler } from '../utils/error-handler.ts';
-import { type ImageGenerationParams } from '../config/schemas.ts';
+import { MinimaxBaseClient } from '../core/base-client.js';
+import { API_CONFIG, DEFAULTS, MODELS, CONSTRAINTS, type ImageModel } from '../config/constants.js';
+import { FileHandler } from '../utils/file-handler.js';
+import { ErrorHandler } from '../utils/error-handler.js';
+import { type ImageGenerationParams } from '../config/schemas.js';
 
 interface ImageGenerationPayload {
   model: string;

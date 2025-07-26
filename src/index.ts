@@ -4,7 +4,7 @@ import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 
 // Import refactored components
-import { ConfigManager } from './config/config-manager.ts';
+import { ConfigManager } from './config/config-manager.js';
 import { 
   imageGenerationSchema,
   textToSpeechSchema,
@@ -12,11 +12,11 @@ import {
   validateImageParams,
   validateTTSParams,
   validateTaskBarrierParams
-} from './config/schemas.ts';
-import { ImageGenerationService } from './services/image-service.ts';
-import { TextToSpeechService } from './services/tts-service.ts';
-import { RateLimitedTaskManager } from './core/task-manager.ts';
-import { ErrorHandler } from './utils/error-handler.ts';
+} from './config/schemas.js';
+import { ImageGenerationService } from './services/image-service.js';
+import { TextToSpeechService } from './services/tts-service.js';
+import { RateLimitedTaskManager } from './core/task-manager.js';
+import { ErrorHandler } from './utils/error-handler.js';
 
 // MCP Tool Response interface
 interface ToolResponse {

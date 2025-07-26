@@ -2,7 +2,7 @@ import fs from 'fs/promises';
 import path from 'path';
 import fetch from 'node-fetch';
 import type { RequestInit } from 'node-fetch';
-import { MinimaxError } from './error-handler.ts';
+import { MinimaxError } from './error-handler.js';
 
 interface DownloadOptions {
   timeout?: number;

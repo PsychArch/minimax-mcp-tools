@@ -1,6 +1,6 @@
-import { AdaptiveRateLimiter } from './rate-limiter.ts';
-import { RATE_LIMITS } from '../config/constants.ts';
-import { MinimaxError, ErrorHandler } from '../utils/error-handler.ts';
+import { AdaptiveRateLimiter } from './rate-limiter.js';
+import { RATE_LIMITS } from '../config/constants.js';
+import { MinimaxError, ErrorHandler } from '../utils/error-handler.js';
 
 // Type definitions
 interface TaskResult {

@@ -25,9 +25,7 @@
     "exactOptionalPropertyTypes": true,
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
-    "noUncheckedIndexedAccess": true,
-    "allowImportingTsExtensions": true,
-    "noEmit": true
+    "noUncheckedIndexedAccess": true
   },
   "include": [
     "src/**/*"
