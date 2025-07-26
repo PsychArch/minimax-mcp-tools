@@ -44,3 +44,5 @@ coverage/
 
 # Optional eslint cache
 .eslintcache
+
+mcp.json
