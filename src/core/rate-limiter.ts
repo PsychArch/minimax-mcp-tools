@@ -25,7 +25,7 @@ interface RateLimiterStatus {
   burst: number;
 }
 
-interface AdaptiveStatus extends RateLimiterStatus {
+export interface AdaptiveStatus extends RateLimiterStatus {
   consecutiveErrors: number;
   adaptedRpm: number;
   originalRpm: number;
@@ -108,7 +108,6 @@ export class RateLimiter {
 
 export class AdaptiveRateLimiter extends RateLimiter {
   private consecutiveErrors: number;
-  private lastErrorTime: number;
   private originalRpm: number;
   private backoffFactor: number;
   private recoveryFactor: number;
@@ -117,7 +116,6 @@ export class AdaptiveRateLimiter extends RateLimiter {
   constructor(config: AdaptiveRateLimiterConfig) {
     super(config);
     this.consecutiveErrors = 0;
-    this.lastErrorTime = 0;
     this.originalRpm = this.rpm;
     this.backoffFactor = config.backoffFactor || 0.5;
     this.recoveryFactor = config.recoveryFactor || 1.1;
@@ -139,7 +137,6 @@ export class AdaptiveRateLimiter extends RateLimiter {
   onError(error: Error): void {
     if (error instanceof MinimaxRateLimitError) {
       this.consecutiveErrors++;
-      this.lastErrorTime = Date.now();
       
       // Reduce rate limit on consecutive errors
       const backoffMultiplier = Math.pow(this.backoffFactor, Math.min(this.consecutiveErrors, this.maxBackoff));

@@ -120,21 +120,21 @@ export class ErrorHandler {
     // Handle HTTP errors
     if (error.message && error.message.includes('HTTP')) {
       const match = error.message.match(/HTTP (\d+):/);
-      const statusCode = match ? parseInt(match[1], 10) : null;
+      const statusCode = match ? parseInt(match[1]!, 10) : null;
       
       switch (statusCode) {
         case 401:
-          return new MinimaxAPIError('Unauthorized: Invalid API key', statusCode);
+          return new MinimaxAPIError('Unauthorized: Invalid API key', statusCode!);
         case 403:
-          return new MinimaxAPIError('Forbidden: Access denied', statusCode);
+          return new MinimaxAPIError('Forbidden: Access denied', statusCode!);
         case 404:
-          return new MinimaxAPIError('Not found: Invalid endpoint', statusCode);
+          return new MinimaxAPIError('Not found: Invalid endpoint', statusCode!);
         case 429:
           return new MinimaxRateLimitError('Rate limit exceeded', null);
         case 500:
-          return new MinimaxAPIError('Internal server error', statusCode);
+          return new MinimaxAPIError('Internal server error', statusCode!);
         default:
-          return new MinimaxAPIError(error.message, statusCode);
+          return new MinimaxAPIError(error.message, statusCode!);
       }
     }
 

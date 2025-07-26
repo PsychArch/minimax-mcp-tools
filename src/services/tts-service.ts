@@ -219,26 +219,4 @@ export class TextToSpeechService extends MinimaxBaseClient {
     return issues;
   }
 
-  // Health check override for TTS service
-  override async healthCheck(): Promise<{ status: 'healthy' | 'unhealthy'; timestamp: string; error?: string }> {
-    try {
-      // Test with a minimal TTS request (we could use a different endpoint if available)
-      // For now, just return healthy if we can construct a payload
-      const testParams: TextToSpeechParams = {
-        text: 'test',
-        outputFile: '/tmp/test.mp3'
-      };
-      
-      // Just validate we can build a payload, don't actually make the request
-      this.buildPayload(testParams);
-      
-      return { status: 'healthy', timestamp: new Date().toISOString() };
-    } catch (error: any) {
-      return { 
-        status: 'unhealthy', 
-        error: ErrorHandler.formatErrorForUser(error),
-        timestamp: new Date().toISOString() 
-      };
-    }
-  }
 }

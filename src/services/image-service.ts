@@ -1,7 +1,7 @@
 import { MinimaxBaseClient } from '../core/base-client.ts';
-import { API_CONFIG, DEFAULTS, MODELS, CONSTRAINTS, type ImageModel, type AspectRatio } from '../config/constants.ts';
+import { API_CONFIG, DEFAULTS, MODELS, CONSTRAINTS, type ImageModel } from '../config/constants.ts';
 import { FileHandler } from '../utils/file-handler.ts';
-import { ErrorHandler, MinimaxError } from '../utils/error-handler.ts';
+import { ErrorHandler } from '../utils/error-handler.ts';
 import { type ImageGenerationParams } from '../config/schemas.ts';
 
 interface ImageGenerationPayload {
@@ -137,10 +137,10 @@ export class ImageGenerationService extends MinimaxBaseClient {
         
         if (imageBase64.length && !imageUrls.length) {
           // Save base64 image
-          await FileHandler.saveBase64Image(imageBase64[i], filename);
+          await FileHandler.saveBase64Image(imageBase64[i]!, filename);
         } else {
           // Download from URL
-          await FileHandler.downloadFile(imageSources[i], filename);
+          await FileHandler.downloadFile(imageSources[i]!, filename);
         }
         
         savedFiles.push(filename);
@@ -193,26 +193,4 @@ export class ImageGenerationService extends MinimaxBaseClient {
     return MODELS.IMAGE[modelName as ImageModel] || null;
   }
 
-  // Health check override for image service
-  override async healthCheck(): Promise<{ status: 'healthy' | 'unhealthy'; timestamp: string; error?: string }> {
-    try {
-      // Test with a minimal image generation request (we could use a different endpoint if available)
-      // For now, just return healthy if we can construct a payload
-      const testParams: ImageGenerationParams = {
-        prompt: 'test',
-        outputFile: '/tmp/test.jpg'
-      };
-      
-      // Just validate we can build a payload, don't actually make the request
-      this.buildPayload(testParams);
-      
-      return { status: 'healthy', timestamp: new Date().toISOString() };
-    } catch (error: any) {
-      return { 
-        status: 'unhealthy', 
-        error: ErrorHandler.formatErrorForUser(error),
-        timestamp: new Date().toISOString() 
-      };
-    }
-  }
 }

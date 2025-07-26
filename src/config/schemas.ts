@@ -5,8 +5,6 @@ import {
   type VoiceId,
   type AspectRatio,
   type StyleType,
-  type ResponseFormat,
-  type SubjectType,
   type Emotion,
   type AudioFormat,
   type SampleRate,
@@ -84,7 +82,7 @@ export const textToSpeechSchema = z.object({
     
   voiceId: z.enum(Object.keys(VOICES) as [VoiceId, ...VoiceId[]])
     .default('female-shaonv' as VoiceId)
-    .describe(`Voice ID for speech generation. Available voices: ${Object.keys(VOICES).map(id => `${id} (${VOICES[id].name})`).join(', ')}`),
+    .describe(`Voice ID for speech generation. Available voices: ${Object.keys(VOICES).map(id => `${id} (${VOICES[id as VoiceId]?.name || id})`).join(', ')}`),
     
   speed: z.number()
     .min(CONSTRAINTS.TTS.SPEED_MIN)
@@ -230,7 +228,7 @@ export const textToSpeechToolSchema = {
         type: "string",
         enum: Object.keys(VOICES),
         default: "female-shaonv",
-        description: `Voice ID for speech generation. Available voices: ${Object.keys(VOICES).map(id => `${id} (${VOICES[id].name})`).join(', ')}`
+        description: `Voice ID for speech generation. Available voices: ${Object.keys(VOICES).map(id => `${id} (${VOICES[id as VoiceId]?.name || id})`).join(', ')}`
       },
       speed: {
         type: "number",

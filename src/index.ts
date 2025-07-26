@@ -20,6 +20,7 @@ import { ErrorHandler } from './utils/error-handler.ts';
 
 // MCP Tool Response interface
 interface ToolResponse {
+  [x: string]: unknown;
   content: Array<{
     type: "text";
     text: string;
@@ -128,7 +129,7 @@ server.registerTool(
   },
   async (params: unknown): Promise<ToolResponse> => {
     try {
-      const validatedParams = validateTaskBarrierParams(params);
+      validateTaskBarrierParams(params);
       const { completed, results } = await taskManager.barrier();
       
       if (completed === 0) {

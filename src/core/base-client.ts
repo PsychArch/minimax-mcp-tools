@@ -115,7 +115,7 @@ export class MinimaxBaseClient {
     return (
       error.code === 'NETWORK_ERROR' ||
       error.code === 'TIMEOUT_ERROR' ||
-      ('statusCode' in error && error.statusCode >= 500 && error.statusCode < 600)
+      ('statusCode' in error && typeof error.statusCode === 'number' && error.statusCode >= 500 && error.statusCode < 600)
     );
   }
 

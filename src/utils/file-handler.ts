@@ -49,7 +49,6 @@ export class FileHandler {
       await this.ensureDirectoryExists(outputPath);
       
       const response = await fetch(url, {
-        timeout: options.timeout || 30000,
         ...options.fetchOptions
       });
 
