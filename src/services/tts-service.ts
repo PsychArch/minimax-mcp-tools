@@ -15,8 +15,8 @@ interface TTSPayload {
     emotion: string;
   };
   audio_setting: {
-    sample_rate: string;
-    bitrate: string;
+    sample_rate: number;
+    bitrate: number;
     format: string;
     channel: number;
   };
@@ -38,18 +38,15 @@ interface TTSResponse {
 }
 
 interface TTSResult {
-  success: boolean;
-  audioFile?: string;
-  voiceUsed?: string;
-  model?: string;
-  duration?: number | null;
-  format?: string;
-  sampleRate?: number;
-  bitrate?: number;
+  audioFile: string;
+  voiceUsed: string;
+  model: string;
+  duration: number | null;
+  format: string;
+  sampleRate: number;
+  bitrate: number;
   subtitleFile?: string;
   warnings?: string[];
-  error?: string;
-  code?: string;
 }
 
 
@@ -73,11 +70,8 @@ export class TextToSpeechService extends MinimaxBaseClient {
       const processedError = ErrorHandler.handleAPIError(error);
       ErrorHandler.logError(processedError, { service: 'tts', params });
       
-      return {
-        success: false,
-        error: ErrorHandler.formatErrorForUser(processedError),
-        code: processedError.code
-      };
+      // Throw the error so task manager can properly mark it as failed
+      throw processedError;
     }
   }
 
@@ -96,8 +90,8 @@ export class TextToSpeechService extends MinimaxBaseClient {
         emotion: params.emotion || ttsDefaults.emotion
       },
       audio_setting: {
-        sample_rate: params.sampleRate || ttsDefaults.sampleRate,
-        bitrate: params.bitrate || ttsDefaults.bitrate,
+        sample_rate: parseInt(params.sampleRate || ttsDefaults.sampleRate),
+        bitrate: parseInt(params.bitrate || ttsDefaults.bitrate),
         format: params.format || ttsDefaults.format,
         channel: ttsDefaults.channel
       }
@@ -171,14 +165,13 @@ export class TextToSpeechService extends MinimaxBaseClient {
 
     const ttsDefaults = DEFAULTS.TTS as any;
     const result: TTSResult = {
-      success: true,
       audioFile: params.outputFile,
       voiceUsed: params.voiceId || ttsDefaults.voiceId,
       model: (params as any).highQuality ? 'speech-02-hd' : 'speech-02-turbo',
       duration: response.data?.duration || null,
       format: params.format || ttsDefaults.format,
-      sampleRate: params.sampleRate || ttsDefaults.sampleRate,
-      bitrate: params.bitrate || ttsDefaults.bitrate
+      sampleRate: parseInt(params.sampleRate || ttsDefaults.sampleRate),
+      bitrate: parseInt(params.bitrate || ttsDefaults.bitrate)
     };
 
     // Subtitles feature removed for simplicity

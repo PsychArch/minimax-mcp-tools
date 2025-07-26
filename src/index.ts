@@ -155,7 +155,7 @@ server.registerTool(
           // TTS generation result
           const subtitles = result.subtitleFile ? ` + subtitles` : '';
           const warnings = result.warnings ? ` (${result.warnings.length} warnings)` : '';
-          return `✅ Task ${taskId}: Generated speech${subtitles}${warnings}\n   🎵 File: ${result.audioFile}\n   🎤 Voice: ${result.voiceUsed}`;
+          return `✅ Task ${taskId}: Generated speech${subtitles}${warnings}`;
         } else {
           // Generic success
           return `✅ Task ${taskId}: Completed successfully`;

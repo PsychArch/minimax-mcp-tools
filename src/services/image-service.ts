@@ -32,14 +32,11 @@ interface ImageGenerationResponse {
 }
 
 interface ImageGenerationResult {
-  success: boolean;
-  files?: string[];
-  count?: number;
-  model?: string;
-  prompt?: string;
+  files: string[];
+  count: number;
+  model: string;
+  prompt: string;
   warnings?: string[];
-  error?: string;
-  code?: string;
 }
 
 export class ImageGenerationService extends MinimaxBaseClient {
@@ -62,11 +59,8 @@ export class ImageGenerationService extends MinimaxBaseClient {
       const processedError = ErrorHandler.handleAPIError(error);
       ErrorHandler.logError(processedError, { service: 'image', params });
       
-      return {
-        success: false,
-        error: ErrorHandler.formatErrorForUser(processedError),
-        code: processedError.code
-      };
+      // Throw the error so task manager can properly mark it as failed
+      throw processedError;
     }
   }
 
@@ -163,7 +157,6 @@ export class ImageGenerationService extends MinimaxBaseClient {
     const modelUsed = params.style ? 'image-01-live' : 'image-01';
     
     const result: ImageGenerationResult = {
-      success: true,
       files: savedFiles,
       count: savedFiles.length,
       model: modelUsed,
