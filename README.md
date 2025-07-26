@@ -1,134 +1,130 @@
 # Minimax MCP Tools
 
-![Minimax MCP Tools Banner](assets/minimax-mcp-tools-banner.jpg)
+![Banner](assets/banner.png)
 
-A Model Context Protocol (MCP) server implementation with Minimax API integration for AI-powered image generation and text-to-speech functionality.
+A Model Context Protocol (MCP) server for Minimax AI integration, providing async image generation and text-to-speech with advanced rate limiting and error handling.
 
 English | [简体中文](README.zh-CN.md)
 
-## Features
+## Quick Start
 
-- **Image Generation**: Generate high-quality images based on text prompts using Minimax's image-01 model
-- **Text-to-Speech (TTS)**: Convert text to natural-sounding speech with various voice options, emotions, and audio formats
+### 1. Prerequisites
+- Node.js 18+
+- Minimax API key from [platform.minimaxi.com](https://platform.minimaxi.com/)
 
-## Setup
+### 2. Setup
+```bash
+# Set your API key
+export MINIMAX_API_KEY="your_api_key_here"
 
-### Prerequisites
+# Install and run
+npm install
+npm start
+```
 
-- Node.js 16 or higher
-- A Minimax API key (obtain from [Minimax Platform](https://api.minimax.chat/))
-- Minimax Group ID for TTS functionality
-
-### Configuration
-
-Create or update your MCP configuration file:
-
+### 3. MCP Configuration
+Add to your MCP settings:
 ```json
 {
   "mcpServers": {
     "minimax-mcp-tools": {
-      "command": "npx",
-      "args": [
-        "minimax-mcp-tools"
-      ],
+      "command": "node",
+      "args": ["index.js"],
+      "cwd": "/path/to/minimax-mcp-tools",
       "env": {
-        "MINIMAX_API_KEY": "your-minimax-api-key",
-        "MINIMAX_GROUP_ID": "your-minimax-group-id"
+        "MINIMAX_API_KEY": "your_api_key_here"
       }
     }
   }
 }
 ```
 
-## MCP Interface
+## Tools
 
-### Image Generation
+### `submit_image_generation`
+Generate images asynchronously with rate limiting (10 RPM).
 
-Generate images based on text prompts:
+**Required:**
+- `prompt`: Text description (max 1500 chars)
+- `outputFile`: Absolute path for image file
+
+**Optional:**
+- `aspectRatio`: "1:1", "16:9", "4:3", etc. (default: "1:1")
+- `n`: Number of images 1-9 (default: 1)
+- `model`: "image-01" or "image-01-live" (default: "image-01")
+- `subjectReference`: Reference image URL or local path
+- `customSize`: `{width, height}` (512-2048, divisible by 8)
+
+### `submit_speech_generation`
+Convert text to speech asynchronously with rate limiting (20 RPM).
+
+**Required:**
+- `text`: Text to convert (max 10000 chars)
+- `outputFile`: Absolute path for audio file
+
+**Optional:**
+- `model`: "speech-02-hd" or "speech-02-turbo" (default: "speech-02-hd")
+- `voiceId`: Voice identifier (default: "female-shaonv"). Available voices:
+  - **Chinese Male**: male-qn-qingse, male-qn-jingying, male-qn-badao, male-qn-daxuesheng
+  - **Chinese Female**: female-shaonv, female-yujie, female-chengshu, female-tianmei
+  - **Professional**: presenter_male, presenter_female, audiobook_male_1/2, audiobook_female_1/2
+  - **Beta Quality**: *-jingpin versions of above voices
+  - **Children/Character**: clever_boy, cute_boy, lovely_girl, cartoon_pig, bingjiao_didi, etc.
+  - **English**: Santa_Claus, Grinch, Rudolph, Arnold, Charming_Santa, Charming_Lady, etc.
+- `speed`: 0.5-2.0 (default: 1.0)
+- `emotion`: "neutral", "happy", "sad", "angry", "fearful", "disgusted", "surprised" (default: "neutral")
+- `format`: "mp3", "wav", "flac", "pcm" (default: "mp3")
+- `volume`: 0.1-10.0 (default: 1.0)
+- `pitch`: -12 to 12 (default: 0)
+
+### `task_barrier`
+Wait for all submitted tasks to complete and get results.
+
+## Usage Example
 
 ```javascript
-// Example parameters for image generation
-{
-  "prompt": "A mountain landscape at sunset",
-  "aspectRatio": "16:9",
-  "n": 1,
-  "outputFile": "/absolute/path/to/image.jpg",
-  "subjectReference": "/path/to/reference.jpg" // Optional: local file or URL
-}
+// Submit multiple tasks
+await submit_image_generation({
+  prompt: "A serene mountain landscape",
+  outputFile: "/tmp/mountain.jpg",
+  aspectRatio: "16:9"
+});
+
+await submit_speech_generation({
+  text: "Hello world, this is a test",
+  outputFile: "/tmp/speech.mp3",
+  emotion: "happy"
+});
+
+// Wait for completion and get results
+await task_barrier();
 ```
 
-Parameters:
-- `prompt` (required): Description of the image to generate
-- `outputFile` (required): Absolute path to save the generated image file. **The directory must already exist**. When generating multiple images (n>1), files will be named with sequential numbers (e.g., 'image-1.jpg', 'image-2.jpg').
-- `aspectRatio` (optional): Aspect ratio of the image (default: "1:1", options: "1:1", "16:9", "4:3", "3:2", "2:3", "3:4", "9:16", "21:9")
-- `n` (optional): Number of images to generate (default: 1, range: 1-9). When n>1, the output filenames will be automatically numbered.
-- `subjectReference` (optional): Path to a local image file or a public URL for character reference. When provided, the generated image will use this as a reference for character appearance. Supported formats: JPG, JPEG, PNG
+## Features
 
-### Text-to-Speech
+✅ **No Group ID Required** - Only API key needed  
+✅ **Async Task Management** - Submit multiple tasks, wait with barrier  
+✅ **Adaptive Rate Limiting** - Automatic adjustment based on API responses  
+✅ **Comprehensive Error Handling** - Detailed error messages and recovery  
+✅ **Production Ready** - Health checks, metrics, graceful shutdown  
 
-Convert text to speech with various customization options:
+## Architecture
 
-```javascript
-// Example parameters for text-to-speech
-{
-  "text": "Hello, this is a test of the text-to-speech functionality.",
-  "model": "speech-02-hd",
-  "voiceId": "female-shaonv",
-  "speed": 1.0,
-  "volume": 1.0,
-  "pitch": 0,
-  "emotion": "happy",
-  "format": "mp3",
-  "outputFile": "/absolute/path/to/audio.mp3",
-  "subtitleEnable": true
-}
-```
+- **Clean separation**: Config, services, utilities properly separated
+- **Rate limiting**: Token bucket with burst capacity and adaptive adjustment
+- **Error recovery**: Exponential backoff with circuit breaking
+- **Validation**: Zod-based schemas with detailed error messages
+- **Monitoring**: Built-in health checks and performance metrics
 
-#### Basic Parameters:
-- `text` (required): Text to convert to speech (max 10,000 characters)
-- `outputFile` (required): Absolute path to save the generated audio file
-- `model` (optional): Model version to use (default: "speech-02-hd", options: "speech-02-hd", "speech-02-turbo")
-  - `speech-02-hd`: High-definition model with excellent timbre similarity, rhythm stability, and studio-grade audio quality
-  - `speech-02-turbo`: Fast model with excellent performance and low latency, enhanced multilingual capabilities
-- `voiceId` (optional): Voice ID to use (default: "male-qn-qingse")
-- `speed` (optional): Speech speed (default: 1.0, range: 0.5-2.0)
-- `volume` (optional): Speech volume (default: 1.0, range: 0.1-10.0)
-- `pitch` (optional): Speech pitch (default: 0, range: -12 to 12)
-- `emotion` (optional): Emotion of the speech (default: "neutral", options: "happy", "sad", "angry", "fearful", "disgusted", "surprised", "neutral")
-- `timberWeights` (optional): Voice mixing settings, allows mixing up to 4 different voices with weights
-  ```javascript
-  "timberWeights": [
-    { "voice_id": "male-qn-qingse", "weight": 70 },
-    { "voice_id": "female-shaonv", "weight": 30 }
-  ]
-  ```
+## Environment Variables
 
-#### Audio Settings:
-- `format` (optional): Audio format (default: "mp3", options: "mp3", "pcm", "flac", "wav")
-- `sampleRate` (optional): Sample rate in Hz (default: 32000, options: 8000, 16000, 22050, 24000, 32000, 44100)
-- `bitrate` (optional): Bitrate for MP3 format (default: 128000, options: 32000, 64000, 128000, 256000)
-- `channel` (optional): Number of audio channels (default: 1, options: 1=mono, 2=stereo)
-
-#### Advanced Features:
-- `latexRead` (optional): Whether to read LaTeX formulas (default: false)
-- `pronunciationDict` (optional): List of pronunciation replacements
-  ```javascript
-  "pronunciationDict": ["处理/(chu3)(li3)", "危险/dangerous"]
-  ```
-- `stream` (optional): Whether to use streaming mode (default: false)
-- `languageBoost` (optional): Enhance recognition of specific languages
-  - Options: "Chinese", "Chinese,Yue", "English", "Arabic", "Russian", "Spanish", "French", "Portuguese", "German", "Turkish", "Dutch", "Ukrainian", "Vietnamese", "Indonesian", "Japanese", "Italian", "Korean", "Thai", "Polish", "Romanian", "Greek", "Czech", "Finnish", "Hindi", "auto"
-- `subtitleEnable` (optional): Whether to enable subtitle generation (default: false)
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `MINIMAX_API_KEY` | *required* | Your Minimax API key |
+| `LOG_LEVEL` | `error` | Logging level: `error` or `debug` |
+| `MAX_CONCURRENCY` | `5` | Max concurrent tasks |
+| `RETRY_ATTEMPTS` | `3` | Number of retry attempts |
 
 ## License
 
 MIT
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-## Acknowledgements
-
-- [Minimax API](https://platform.minimaxi.com/) for providing the AI models
-- [Model Context Protocol](https://github.com/modelcontextprotocol/) for the MCP specification
