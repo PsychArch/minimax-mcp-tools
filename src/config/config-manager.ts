@@ -38,7 +38,7 @@ export class ConfigManager {
   private loadConfig(): Config {
     return {
       apiKey: this.getRequiredEnv('MINIMAX_API_KEY'),
-      apiHost: 'https://api.minimax.chat',
+      apiHost: 'https://api.minimaxi.com',
       logLevel: 'error',
       tempDir: '/tmp',
       maxConcurrency: 5,
