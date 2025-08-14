@@ -110,8 +110,8 @@ export const MODELS: Record<'IMAGE' | 'TTS', Record<string, ModelConfig>> = {
     'image-01-live': { name: 'image-01-live', description: 'Live image generation' }
   },
   TTS: {
-    'speech-02-hd': { name: 'speech-02-hd', description: 'High quality TTS' },
-    'speech-02-turbo': { name: 'speech-02-turbo', description: 'Fast TTS' }
+    'speech-2.5-hd-preview': { name: 'speech-2.5-hd-preview', description: 'Latest HD model with excellent prosody and voice cloning similarity' },
+    'speech-2.5-turbo-preview': { name: 'speech-2.5-turbo-preview', description: 'Latest Turbo model supporting 40 languages with enhanced stability' }
   }
 } as const;
 
@@ -224,7 +224,7 @@ export const DEFAULTS = {
     styleWeight: 0.8
   },
   TTS: {
-    model: 'speech-02-hd',
+    model: 'speech-2.5-hd-preview',
     voiceId: 'female-shaonv',
     speed: 1.0,
     volume: 1.0,

@@ -49,7 +49,7 @@ try {
 // Create MCP server
 const server = new McpServer({
   name: "minimax-mcp-tools",
-  version: "1.5.0",
+  version: "2.2.0",
   description: "Async Minimax AI integration for image generation and text-to-speech"
 });
 
@@ -201,7 +201,5 @@ process.on('SIGTERM', () => {
 });
 
 // Start server
-console.error("Minimax MCP Tools Server v1.5.0.");
-
 const transport = new StdioServerTransport();
 await server.connect(transport);

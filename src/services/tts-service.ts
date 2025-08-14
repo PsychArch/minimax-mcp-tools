@@ -77,8 +77,8 @@ export class TextToSpeechService extends MinimaxBaseClient {
 
   private buildPayload(params: TextToSpeechParams): TTSPayload {
     const ttsDefaults = DEFAULTS.TTS as any;
-    // Map highQuality parameter to appropriate model
-    const model = (params as any).highQuality ? 'speech-02-hd' : 'speech-02-turbo';
+    // Map highQuality parameter to appropriate Speech 2.5 model
+    const model = (params as any).highQuality ? 'speech-2.5-hd-preview' : 'speech-2.5-turbo-preview';
     const payload: TTSPayload = {
       model: model,
       text: params.text,
@@ -167,7 +167,7 @@ export class TextToSpeechService extends MinimaxBaseClient {
     const result: TTSResult = {
       audioFile: params.outputFile,
       voiceUsed: params.voiceId || ttsDefaults.voiceId,
-      model: (params as any).highQuality ? 'speech-02-hd' : 'speech-02-turbo',
+      model: (params as any).highQuality ? 'speech-2.5-hd-preview' : 'speech-2.5-turbo-preview',
       duration: response.data?.duration || null,
       format: params.format || ttsDefaults.format,
       sampleRate: parseInt(params.sampleRate || ttsDefaults.sampleRate),
@@ -200,7 +200,7 @@ export class TextToSpeechService extends MinimaxBaseClient {
   validateVoiceParameters(params: TextToSpeechParams): string[] {
     const ttsDefaults = DEFAULTS.TTS as any;
     const voice = this.getVoiceInfo(params.voiceId || ttsDefaults.voiceId);
-    const model = (params as any).highQuality ? 'speech-02-hd' : 'speech-02-turbo';
+    const model = (params as any).highQuality ? 'speech-2.5-hd-preview' : 'speech-2.5-turbo-preview';
     
     const issues: string[] = [];
     
@@ -208,9 +208,9 @@ export class TextToSpeechService extends MinimaxBaseClient {
       issues.push(`Unknown voice ID: ${params.voiceId}`);
     }
     
-    // Check emotion compatibility (both speech-02 models support emotions)
+    // Check emotion compatibility (Speech 2.5 models support emotions)
     if (params.emotion && params.emotion !== 'neutral') {
-      const emotionSupportedModels = ['speech-02-hd', 'speech-02-turbo', 'speech-01-hd', 'speech-01-turbo'];
+      const emotionSupportedModels = ['speech-2.5-hd-preview', 'speech-2.5-turbo-preview'];
       if (!emotionSupportedModels.includes(model)) {
         issues.push(`Emotion parameter not supported by model ${model}`);
       }

@@ -92,12 +92,12 @@ export class TaskManager {
   async barrier(): Promise<BarrierResult> {
     const activeTasks = Array.from(this.tasks.values());
     
-    if (activeTasks.length === 0) {
-      return { completed: 0, results: [] };
+    // Wait for any active tasks to complete
+    if (activeTasks.length > 0) {
+      await Promise.allSettled(activeTasks);
     }
 
-    await Promise.allSettled(activeTasks);
-
+    // Return all completed tasks (including those completed before this barrier call)
     const results = Array.from(this.completedTasks.entries()).map(([taskId, taskResult]) => ({
       taskId,
       ...taskResult

@@ -118,7 +118,7 @@ export const textToSpeechSchema = z.object({
     .default("128000" as Bitrate)  
     .describe(`Audio bitrate in bps. Options: ${CONSTRAINTS.TTS.BITRATES.join(', ')}`),
     
-  languageBoost: z.string().default('auto').describe('Enhance recognition for specific languages/dialects. Options: Chinese, Chinese,Yue, English, Arabic, Russian, Spanish, French, Portuguese, German, Turkish, Dutch, Ukrainian, Vietnamese, Indonesian, Japanese, Italian, Korean, Thai, Polish, Romanian, Greek, Czech, Finnish, Hindi, auto. Use "auto" for automatic detection'),
+  languageBoost: z.string().default('auto').describe('Enhance recognition for specific languages/dialects. Options: Chinese, Chinese,Yue, English, Arabic, Russian, Spanish, French, Portuguese, German, Turkish, Dutch, Ukrainian, Vietnamese, Indonesian, Japanese, Italian, Korean, Thai, Polish, Romanian, Greek, Czech, Finnish, Hindi, Bulgarian, Danish, Hebrew, Malay, Persian, Slovak, Swedish, Croatian, Filipino, Hungarian, Norwegian, Slovenian, Catalan, Nynorsk, Tamil, Afrikaans, auto. Use "auto" for automatic detection'),
   
   intensity: z.number()
     .int()
@@ -278,7 +278,7 @@ export const textToSpeechToolSchema = {
       languageBoost: {
         type: "string",
         default: "auto",
-        description: "Enhance recognition for specific languages/dialects. Options: Chinese, Chinese,Yue, English, Arabic, Russian, Spanish, French, Portuguese, German, Turkish, Dutch, Ukrainian, Vietnamese, Indonesian, Japanese, Italian, Korean, Thai, Polish, Romanian, Greek, Czech, Finnish, Hindi, auto. Use 'auto' for automatic detection"
+        description: "Enhance recognition for specific languages/dialects. Options: Chinese, Chinese,Yue, English, Arabic, Russian, Spanish, French, Portuguese, German, Turkish, Dutch, Ukrainian, Vietnamese, Indonesian, Japanese, Italian, Korean, Thai, Polish, Romanian, Greek, Czech, Finnish, Hindi, Bulgarian, Danish, Hebrew, Malay, Persian, Slovak, Swedish, Croatian, Filipino, Hungarian, Norwegian, Slovenian, Catalan, Nynorsk, Tamil, Afrikaans, auto. Use 'auto' for automatic detection"
       },
       intensity: {
         type: "number", 
