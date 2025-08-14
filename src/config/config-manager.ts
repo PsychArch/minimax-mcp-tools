@@ -1,4 +1,4 @@
-import { MinimaxConfigError } from '../utils/error-handler.ts';
+import { MinimaxConfigError } from '../utils/error-handler.js';
 
 interface Config {
   apiKey: string;

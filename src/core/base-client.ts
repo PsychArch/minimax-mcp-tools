@@ -1,8 +1,8 @@
 import fetch from 'node-fetch';
 import type { RequestInit, Response } from 'node-fetch';
-import { ConfigManager } from '../config/config-manager.ts';
-import { API_CONFIG } from '../config/constants.ts';
-import { ErrorHandler, MinimaxError } from '../utils/error-handler.ts';
+import { ConfigManager } from '../config/config-manager.js';
+import { API_CONFIG } from '../config/constants.js';
+import { ErrorHandler, MinimaxError } from '../utils/error-handler.js';
 
 interface BaseClientOptions {
   baseURL?: string;

@@ -25,9 +25,7 @@
     "exactOptionalPropertyTypes": true,
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
-    "noUncheckedIndexedAccess": true,
-    "allowImportingTsExtensions": true,
-    "noEmit": true
+    "noUncheckedIndexedAccess": true
   },
   "include": [
     "src/**/*"
@@ -40,8 +38,6 @@
   ],
   "ts-node": {
     "esm": true,
-    "experimentalSpecifierResolution": "node",
-    "allowImportingTsExtensions": true,
-    "noEmit": true
+    "experimentalSpecifierResolution": "node"
   }
 }

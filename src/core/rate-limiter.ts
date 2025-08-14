@@ -1,4 +1,4 @@
-import { MinimaxRateLimitError } from '../utils/error-handler.ts';
+import { MinimaxRateLimitError } from '../utils/error-handler.js';
 
 interface RateLimiterConfig {
   rpm: number;

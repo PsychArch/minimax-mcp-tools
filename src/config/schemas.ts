@@ -10,7 +10,7 @@ import {
   type SampleRate,
   type Bitrate,
   type SoundEffect
-} from './constants.ts';
+} from './constants.js';
 
 // Base schemas
 const filePathSchema = z.string().min(1, 'File path is required');
