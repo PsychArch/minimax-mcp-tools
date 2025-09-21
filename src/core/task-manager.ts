@@ -64,7 +64,7 @@ export class TaskManager {
   }
 
   protected generateTaskId(): string {
-    return `task_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    return `task_${++this.taskCounter}`;
   }
 
   async submit(fn: () => Promise<any>, taskId: string | null = null): Promise<TaskSubmissionResult> {
@@ -153,6 +153,10 @@ export class RateLimitedTaskManager extends TaskManager {
     image: TaskMetrics;
     tts: TaskMetrics;
   };
+  private taskCounters: {
+    image: number;
+    tts: number;
+  };
 
   constructor(options: RateLimitedTaskManagerOptions = {}) {
     super();
@@ -169,18 +173,29 @@ export class RateLimitedTaskManager extends TaskManager {
         recoveryFactor: options.recoveryFactor || 1.05
       })
     };
-    
+
     this.metrics = {
       image: { requests: 0, successes: 0, errors: 0 },
       tts: { requests: 0, successes: 0, errors: 0 }
     };
+
+    this.taskCounters = {
+      image: 0,
+      tts: 0
+    };
   }
 
   async submitImageTask(fn: () => Promise<any>, taskId: string | null = null): Promise<TaskSubmissionResult> {
+    if (!taskId) {
+      taskId = `img-${++this.taskCounters.image}`;
+    }
     return this.submitRateLimitedTask('image', fn, taskId);
   }
 
   async submitTTSTask(fn: () => Promise<any>, taskId: string | null = null): Promise<TaskSubmissionResult> {
+    if (!taskId) {
+      taskId = `tts-${++this.taskCounters.tts}`;
+    }
     return this.submitRateLimitedTask('tts', fn, taskId);
   }
 
@@ -228,7 +243,12 @@ export class RateLimitedTaskManager extends TaskManager {
       image: { requests: 0, successes: 0, errors: 0 },
       tts: { requests: 0, successes: 0, errors: 0 }
     };
-    
+
+    this.taskCounters = {
+      image: 0,
+      tts: 0
+    };
+
     Object.values(this.rateLimiters).forEach(limiter => limiter.reset());
   }
 }
