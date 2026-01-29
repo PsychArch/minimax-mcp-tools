@@ -7,6 +7,7 @@ import { type TextToSpeechParams } from '../config/schemas.js';
 interface TTSPayload {
   model: string;
   text: string;
+  output_format?: string;
   voice_setting: {
     voice_id: string;
     speed: number;
@@ -27,6 +28,7 @@ interface TTSPayload {
     timbre?: number;
     sound_effects?: string;
   };
+  continuous_sound?: boolean;
 }
 
 interface TTSResponse {
@@ -77,11 +79,13 @@ export class TextToSpeechService extends MinimaxBaseClient {
 
   private buildPayload(params: TextToSpeechParams): TTSPayload {
     const ttsDefaults = DEFAULTS.TTS as any;
-    // Map highQuality parameter to appropriate Speech 2.6 model
-    const model = (params as any).highQuality ? 'speech-2.6-hd' : 'speech-2.6-turbo';
+    // Map highQuality parameter to appropriate Speech 2.8 model
+    const model = (params as any).highQuality ? 'speech-2.8-hd' : 'speech-2.8-turbo';
     const payload: TTSPayload = {
       model: model,
       text: params.text,
+      output_format: 'hex',
+      continuous_sound: true,
       voice_setting: {
         voice_id: params.voiceId || ttsDefaults.voiceId,
         speed: params.speed || ttsDefaults.speed,
@@ -167,7 +171,7 @@ export class TextToSpeechService extends MinimaxBaseClient {
     const result: TTSResult = {
       audioFile: params.outputFile,
       voiceUsed: params.voiceId || ttsDefaults.voiceId,
-      model: (params as any).highQuality ? 'speech-2.6-hd' : 'speech-2.6-turbo',
+      model: (params as any).highQuality ? 'speech-2.8-hd' : 'speech-2.8-turbo',
       duration: response.data?.duration || null,
       format: params.format || ttsDefaults.format,
       sampleRate: parseInt(params.sampleRate || ttsDefaults.sampleRate),
@@ -200,7 +204,7 @@ export class TextToSpeechService extends MinimaxBaseClient {
   validateVoiceParameters(params: TextToSpeechParams): string[] {
     const ttsDefaults = DEFAULTS.TTS as any;
     const voice = this.getVoiceInfo(params.voiceId || ttsDefaults.voiceId);
-    const model = (params as any).highQuality ? 'speech-2.6-hd' : 'speech-2.6-turbo';
+    const model = (params as any).highQuality ? 'speech-2.8-hd' : 'speech-2.8-turbo';
 
     const issues: string[] = [];
 
@@ -210,7 +214,7 @@ export class TextToSpeechService extends MinimaxBaseClient {
 
     // Check emotion compatibility (Speech 2.6 models support emotions)
     if (params.emotion && params.emotion !== 'neutral') {
-      const emotionSupportedModels = ['speech-2.6-hd', 'speech-2.6-turbo'];
+      const emotionSupportedModels = ['speech-2.8-hd', 'speech-2.8-turbo'];
       if (!emotionSupportedModels.includes(model)) {
         issues.push(`Emotion parameter not supported by model ${model}`);
       }

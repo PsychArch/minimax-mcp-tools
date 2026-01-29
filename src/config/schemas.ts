@@ -78,7 +78,7 @@ export const textToSpeechSchema = z.object({
   
   highQuality: z.boolean()
     .default(false)
-    .describe('Use high-quality model (speech-02-hd) for audiobooks/premium content. Default: false (uses faster speech-02-turbo)'),
+    .describe('Use high-quality model (speech-2.8-hd) for audiobooks/premium content. Default: false (uses faster speech-2.8-turbo)'),
     
   voiceId: z.enum(Object.keys(VOICES) as [VoiceId, ...VoiceId[]])
     .default('female-shaonv' as VoiceId)
@@ -119,6 +119,7 @@ export const textToSpeechSchema = z.object({
     .describe(`Audio bitrate in bps. Options: ${CONSTRAINTS.TTS.BITRATES.join(', ')}`),
     
   languageBoost: z.string().default('auto').describe('Enhance recognition for specific languages/dialects. Options: Chinese, Chinese,Yue, English, Arabic, Russian, Spanish, French, Portuguese, German, Turkish, Dutch, Ukrainian, Vietnamese, Indonesian, Japanese, Italian, Korean, Thai, Polish, Romanian, Greek, Czech, Finnish, Hindi, Bulgarian, Danish, Hebrew, Malay, Persian, Slovak, Swedish, Croatian, Filipino, Hungarian, Norwegian, Slovenian, Catalan, Nynorsk, Tamil, Afrikaans, auto. Use "auto" for automatic detection'),
+
   
   intensity: z.number()
     .int()
@@ -222,7 +223,7 @@ export const textToSpeechToolSchema = {
       highQuality: {
         type: "boolean",
         default: false,
-        description: "Use high-quality model (speech-02-hd) for audiobooks/premium content. Default: false (uses faster speech-02-turbo)"
+        description: "Use high-quality model (speech-2.8-hd) for audiobooks/premium content. Default: false (uses faster speech-2.8-turbo)"
       },
       voiceId: {
         type: "string",
