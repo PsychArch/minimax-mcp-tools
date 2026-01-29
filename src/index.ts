@@ -49,7 +49,7 @@ try {
 // Create MCP server
 const server = new McpServer({
   name: "minimax-mcp-tools",
-  version: "2.2.0",
+  version: "2.2.2",
   description: "Async Minimax AI integration for image generation and text-to-speech"
 });
 
